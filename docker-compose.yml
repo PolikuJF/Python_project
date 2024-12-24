@@ -1,0 +1,14 @@
+name: minecraftparser 
+services:
+  database:
+    container_name: serverss_db
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./sqlite_data:/database
+    ports:
+      - 5000:5000
+
+volumes:
+  sqlite_data:

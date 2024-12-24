@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список серверов</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        h1 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            border: 2px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tbody tr {
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        tbody tr:hover {
+             background-color: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+            cursor: pointer;
+        }
+        .sort,
+        .search {
+            margin-bottom: 25px;
+        }
+        .sort a {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: box-shadow 0.3s ease;
+        }
+        .search-button {
+            background: linear-gradient(to right, #4CAF50, #367c39);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-button:hover {
+            transform: scale(1.05);
+        }
+        .search input {
+            text-align: center;
+            padding: 10px;
+            margin-right: 5px;
+            width: 250px;
+            background-color: white;
+            color: #000;
+            border: 2px solid #04094e;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minecraft Servers</h1>
+    <div class="search">
+        <form method="get" action="/">
+            <input type="text" name="search" placeholder="Поиск сервера..." value="{{ current_search }}">
+            <button type="submit">Поиск</button>
+        </form>
+    </div>
+    <div class="sort">
+        <a href="?order={{ 'desc' if current_order == 'asc' else 'asc' }}&search={{ current_search }}&sort_by=server">
+            Сортировать по названию сервера ({{ 'с начала алфавита' if current_order == 'asc' else 'с конца алфавита' }})
+        </a>
+        <a href="?order={{ 'desc' if current_order == 'asc' else 'asc' }}&search={{ current_search }}&sort_by=players">
+            Сортировать по онлайну ({{ 'по возрастанию' if current_order == 'asc' else 'по убыванию' }})
+        </a>
+        <a href="?order={{ 'desc' if current_order == 'asc' else 'asc' }}&search={{ current_search }}&sort_by=likes">
+            Сортировать по лайкам ({{ 'по возрастанию' if current_order == 'asc' else 'по убыванию' }})
+        </a>
+        <a href="?order={{ 'desc' if current_order == 'asc' else 'asc' }}&search={{ current_search }}&sort_by=points">
+            Сортировать по звездам ({{ 'по возрастанию' if current_order == 'asc' else 'по убыванию' }})
+        </a>
+        <a href="?update=1&search={{ current_search }}&sort_by={{ current_sort }}&order={{ current_order }}">
+            Обновить информацию по онлайну (ждать 15-30 секунд)
+        </a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Название Сервера</th>
+                <th>Онлайн</th>
+                <th>Лайки</th>
+                <th>Звезды</th>
+                <th>Ссылка</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for server in serverss %}
+                <tr>
+                    <td>{{ server[0] }}</td>
+                    <td>{{ server[1] }}</td>
+                    <td>{{ server[2] }}</td>
+                    <td>{{ server[3] }}</td>
+                    <td><a href="{{ server[4] }}">Ссылка</a></td>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
